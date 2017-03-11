@@ -1,0 +1,42 @@
+{
+  "name": "ue-vat-identification",
+  "version": "0.0.1",
+  "description": "get a company legal name and legal address from a european VAT number",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack -d",
+    "start": "node ./dist/index.js",
+    "production": "./node_modules/.bin/webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dloret/UE-VAT-identification.git"
+  },
+  "keywords": [
+    "VAT",
+    "UE",
+    "identification",
+    "legal",
+    "name",
+    "address"
+  ],
+  "author": "Donatien LORET",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dloret/UE-VAT-identification/issues"
+  },
+  "homepage": "https://github.com/dloret/UE-VAT-identification#readme",
+  "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.4.0",
+    "babel-preset-env": "^1.2.1",
+    "eslint": "^3.17.1",
+    "eslint-config-standard": "^7.0.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^2.1.1",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "raw-loader": "^0.5.1"
+  }
+}
