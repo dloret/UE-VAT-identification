@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "./node_modules/.bin/webpack -d",
-    "start": "node ./dist/index.js",
+    "start": "npm run build && node ./build/index.js",
     "production": "./node_modules/.bin/webpack -p"
   },
   "repository": {
@@ -34,9 +34,8 @@
     "eslint-config-standard": "^7.0.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^2.1.1",
+    "raw-loader": "^0.5.1",
     "webpack": "^2.2.1"
   },
-  "dependencies": {
-    "raw-loader": "^0.5.1"
-  }
+  "dependencies": {}
 }
