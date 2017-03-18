@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  target: 'node',
   entry: path.resolve(path.join(__dirname, '/src')),
   output: {
     path: path.resolve(path.join(__dirname, '/build')),
