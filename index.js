@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 
 const url = 'https://euvat.ga/api/info/';
 let vatList = [];
+let companies = [];
 
 // commander: setup the use of this script from the command line
 script.version('0.0.1')
@@ -20,15 +21,18 @@ let stream = fs.createReadStream(script.list)
     trim: true
   }))
   .on('error', err => console.error(err.message))
-  .on('data', vat => vatList.push(vat[0]))
-  .on('end', () => console.log(vatList));
+  .on('data', vat => vatList.push(vat[0]));
+
+stream.on('end', () => console.log(fetchVatInfo(vatList[0])));
 
 function fetchVatInfo (vat) {
   console.log(`URL: ${url}${vat}`);
   fetch(`${url}${vat}`)
     .then(response => response.json())
-    .then(json => console.log(json))
+    .then(company => {
+      companies.push(`${company.countryCode};${company.countryCode}${company.vatNumber};${company.traderName};${company.traderAddress}`);
+      console.log(companies);
+    })
     .catch(err => console.error(`ERROR: ${err}`));
 }
 
-// fetchVatInfo(vat[0]);
