@@ -24,9 +24,9 @@ let stream = fs.createReadStream(script.list)
   .on('error', err => console.error(err.message))
   .on('data', vat => vatList.push(vat[0]));
 
-stream.on('end', () => fetchVatInfo(url, vatList[0])
+stream.on('end', () => vatList.map(vat => fetchVatInfo(url, vat)
     .then(company => {
       companies.push(`${company.countryCode};${company.countryCode}${company.vatNumber};${company.traderName};${company.traderAddress}`);
       console.log(companies);
-    })
+    }))
 );
