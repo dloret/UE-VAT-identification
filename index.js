@@ -35,4 +35,3 @@ function fetchVatInfo (vat) {
     })
     .catch(err => console.error(`ERROR: ${err}`));
 }
-
