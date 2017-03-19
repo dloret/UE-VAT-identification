@@ -29,9 +29,16 @@ let stream = fs.createReadStream(script.list)
 stream.on('end', () => {
   vatList.map(vat => fetchVatInfo(url, vat)
     .then(company => {
-      fs.appendFile(result,
-                    `${company.countryCode};${company.countryCode}${company.vatNumber};${company.traderName};${company.traderAddress}\n`,
-                    err => err ? console.error(`APPENDING ERROR: ${err}`) : null);
+      if (company.valid) {
+        fs.appendFile(result,
+                      `${company.countryCode};${company.countryCode}${company.vatNumber};${company.traderName};${company.traderAddress}\n`,
+                      err => err ? console.error(`APPENDING ERROR: ${err}`) : null);
+      } else {
+        console.log(`${vat}: ${company.message}`);
+        fs.appendFile(result,
+                      `;${vat};${company.message};`,
+                      err => err ? console.error(`APPENDING ERROR: ${err}`) : null);
+      }
     })
   );
 });
