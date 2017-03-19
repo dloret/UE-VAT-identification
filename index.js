@@ -7,7 +7,8 @@ const fetchVatInfo = require('./lib/utils').fetchVatInfo;
 
 const url = 'https://euvat.ga/api/info/';
 let vatList = [];
-let companies = [];
+let result = 'list_of_companies.csv';
+fs.writeFileSync(result, 'iso_country_code;VAT_number;company_name;legal_address\n', err => console.error(`WRITING ERROR: ${err}`));
 
 // commander: setup the use of this script from the command line
 script.version('0.0.1')
@@ -24,9 +25,13 @@ let stream = fs.createReadStream(script.list)
   .on('error', err => console.error(err.message))
   .on('data', vat => vatList.push(vat[0]));
 
-stream.on('end', () => vatList.map(vat => fetchVatInfo(url, vat)
+// After loading the array of vat numbers, fetching the companies info from the API
+stream.on('end', () => {
+  vatList.map(vat => fetchVatInfo(url, vat)
     .then(company => {
-      companies.push(`${company.countryCode};${company.countryCode}${company.vatNumber};${company.traderName};${company.traderAddress}`);
-      console.log(companies);
-    }))
-);
+      fs.appendFile(result,
+                    `${company.countryCode};${company.countryCode}${company.vatNumber};${company.traderName};${company.traderAddress}\n`,
+                    err => err ? console.error(`APPENDING ERROR: ${err}`) : null);
+    })
+  );
+});
