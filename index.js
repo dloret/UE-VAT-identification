@@ -36,7 +36,7 @@ stream.on('end', () => {
       } else {
         console.log(`${vat}: ${company.message}`);
         fs.appendFile(result,
-                      `;${vat};${company.message};`,
+                      `;${vat};${company.message};\n`,
                       err => err ? console.error(`APPENDING ERROR: ${err}`) : null);
       }
     })
