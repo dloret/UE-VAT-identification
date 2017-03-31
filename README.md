@@ -11,6 +11,6 @@ You need to have NodeJS installed, at least at version 7.7.0 (development versio
 
 ``` bash
 cd UE-VAT-identification
-node index.js -l path/to/my/vat/list.csv
+node ue-vat-id.js -l path/to/my/vat/list.csv
 ```
 The result will be delivered as another csv file containing the companies info: 'list_of_companies.csv'
