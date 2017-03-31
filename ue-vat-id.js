@@ -47,20 +47,21 @@ stream.on('end', () => {
  * HELPER FUNCTIONS *
  * *****************/
 
-// console.log();
-
 const fetchVatList = (vatArgs) => {
   Promise.all(vatArgs.map(vat => soap.createClient(api)
     .then(client => client.checkVatApprox(vat))
-    .then(result => writeInFile(
-      resultsPath,
-      `${result.countryCode};${result.countryCode}${result.vatNumber};${result.valid};${(result.traderName) ? result.traderName : 'no identification available'};${(result.traderAddress) ? result.traderAddress : 'no address available'}\n`
-      ))
+    .then(result => {
+      const data = JSON.parse(JSON.stringify(result).replace(/\\n/g, ', ').trim());
+      writeInFile(
+        resultsPath,
+        `${data.countryCode};${data.countryCode}${data.vatNumber};${data.valid};${(data.traderName) ? data.traderName : 'no identification available'};${(data.traderAddress) ? data.traderAddress : 'no address available'}`
+      );
+    })
     .catch(error => {
       console.log(`ERROR: ${error}`);
       writeInFile(
         errorsPath,
-        `${vat.vatNumber}`);
+        `${vat.countryCode}${vat.vatNumber}`);
     })
   ));
 };
@@ -69,7 +70,7 @@ function createFile (filename, data) {
   fs.writeFileSync(
     filename,
     data,
-    error => console.error(`WRITING ERROR: ${error}`)
+    error => { if (error) console.error(`WRITING ERROR: ${error}`); }
   );
 };
 
@@ -77,6 +78,6 @@ function writeInFile (file, message) {
   fs.appendFile(
     file,
     message + '\n',
-    error => { throw new Error(`APPENDING ERROR: ${error}`); }
+    error => { if (error) console.log(`APPENDING ERROR: ${error}`); }
   );
 };
