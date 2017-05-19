@@ -42,47 +42,37 @@ stream.on('end', () => {
   }));
   // fetchVatList(vatList);
 
-  async function fetchVat (api, vat) {
-    try {
-      const client = await soap.createClient(api);
-      const result = await client.checkVatApprox(vat);
-      console.log(result);
-    } catch (error) {
-      console.log('ERROR FETCHING: ', error);
-    }
-  }
-
-  fetchVat(api, vatList[9]);
+  vatList.map(async vat => {
+    let data = await fetchVat(api, vat);
+    data = JSON.parse(JSON.stringify(data).replace(/\\n/g, ', ').trim());
+    writeInFile(
+      resultsPath,
+      `${data.countryCode};${data.countryCode}${data.vatNumber};${data.valid};${(data.traderName) ? data.traderName : 'no identification available'};${(data.traderAddress) ? data.traderAddress : 'no address available'}`
+    );
+  });
 });
 
 /********************
  * HELPER FUNCTIONS *
  * *****************/
 
-const fetchVatList = (vatArgs) => {
-  Promise.all(vatArgs.map(vat => soap.createClient(api)
-    .then(client => client.checkVatApprox(vat))
-    .then(result => {
-      const data = JSON.parse(JSON.stringify(result).replace(/\\n/g, ', ').trim());
-      writeInFile(
-        resultsPath,
-        `${data.countryCode};${data.countryCode}${data.vatNumber};${data.valid};${(data.traderName) ? data.traderName : 'no identification available'};${(data.traderAddress) ? data.traderAddress : 'no address available'}`
-      );
-    })
-    .catch(error => {
-      console.log(`ERROR: ${error}`);
-      writeInFile(
-        errorsPath,
-        `${vat.countryCode}${vat.vatNumber}`);
-    })
-  ));
-};
+async function fetchVat (api, vat) {
+  try {
+    const client = await soap.createClient(api);
+    const result = await client.checkVatApprox(vat);
+    return result;
+  } catch (error) {
+    console.log('ERROR FETCHING: ', error);
+  }
+}
 
 function createFile (filename, data) {
   fs.writeFileSync(
     filename,
     data,
-    error => { if (error) console.error(`WRITING ERROR: ${error}`); }
+    error => {
+      if (error) console.error(`WRITING ERROR: ${error}`);
+    }
   );
 };
 
@@ -90,6 +80,8 @@ function writeInFile (file, message) {
   fs.appendFile(
     file,
     message + '\n',
-    error => { if (error) console.log(`APPENDING ERROR: ${error}`); }
+    error => {
+      if (error) console.log(`APPENDING ERROR: ${error}`);
+    }
   );
 };
