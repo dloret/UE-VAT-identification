@@ -62,7 +62,10 @@ async function fetchVat (api, vat) {
     const result = await client.checkVatApprox(vat);
     return result;
   } catch (error) {
-    console.log('ERROR FETCHING: ', error);
+    console.log('ERROR FETCHING: ', error.message);
+    writeInFile(
+      errorsPath,
+      `${vat.countryCode}${vat.vatNumber}`);
   }
 }
 

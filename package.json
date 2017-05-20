@@ -1,10 +1,10 @@
 {
   "name": "ue-vat-identification",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "get a company legal name and legal address from a european VAT number",
-  "main": "ue-vat-id.js",
+  "main": "async_ue-vat-id.js",
   "scripts": {
-    "start": "node ue-vat-id.js -l ./assets/vat.csv"
+    "start": "node async_ue-vat-id.js -l ./assets/vat.csv"
   },
   "repository": {
     "type": "git",
